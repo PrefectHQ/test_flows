@@ -1,6 +1,10 @@
 deployments:
   - name: artifacts
     entrypoint: artifact_flow.py:artifacts_flow
+    tags: [test-flows]
+    schedule:
+      cron: 0 9 * * *
+      timezone: America/Chicago
     work_pool:
       name: kubernetes-gke-worker-dev
       job_variables: {
@@ -9,6 +13,10 @@ deployments:
         
   - name: sync_async
     entrypoint: async_sync_flow.py:sync_async_flow
+    tags: [test-flows]
+    schedule:
+      cron: 0 9 * * *
+      timezone: America/Chicago
     work_pool:
       name: kubernetes-gke-worker-dev
       job_variables: {
@@ -17,6 +25,10 @@ deployments:
   
   - name: mapped_tasks
     entrypoint: mapped_tasks_flow.py:many_mapped_tasks_flow
+    tags: [test-flows]
+    schedule:
+      cron: 0 9 * * *
+      timezone: America/Chicago
     work_pool:
       name: kubernetes-gke-worker-dev
       job_variables: {
@@ -25,6 +37,10 @@ deployments:
 
   - name: mapped_tasks_hanging
     entrypoint: mapped_tasks_hanging_flow.py:hanging_mapped_tasks_flow
+    tags: [test-flows]
+    schedule:
+      cron: 0 9 * * *
+      timezone: America/Chicago
     work_pool:
       name: kubernetes-gke-worker-dev
       job_variables: {
