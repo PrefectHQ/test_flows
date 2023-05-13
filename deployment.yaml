@@ -4,7 +4,7 @@ deployments:
     work_pool:
       name: kubernetes-gke-worker-dev
       job_variables: {
-        image: prefecthq/prefect:2-python3.10
+        image: prefecthq/prefect-dev:main-python3.10
       }
         
   - name: sync_async
@@ -12,7 +12,7 @@ deployments:
     work_pool:
       name: kubernetes-gke-worker-dev
       job_variables: {
-        image: prefecthq/prefect:2-python3.10
+        image: prefecthq/prefect-dev:main-python3.10
       }
   
   - name: mapped_tasks
@@ -20,7 +20,7 @@ deployments:
     work_pool:
       name: kubernetes-gke-worker-dev
       job_variables: {
-        image: prefecthq/prefect:2-python3.10
+        image: prefecthq/prefect-dev:main-python3.10
       }
 
   - name: mapped_tasks_hanging
@@ -28,5 +28,5 @@ deployments:
     work_pool:
       name: kubernetes-gke-worker-dev
       job_variables: {
-        image: prefecthq/prefect:2-python3.10
+        image: prefecthq/prefect-dev:main-python3.10
       }
