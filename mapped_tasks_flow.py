@@ -11,7 +11,7 @@ def test_task(my_range):
     time.sleep(5)
     logger.info(datetime.today())
 
-@flow(name="Test Flow")
+@flow
 def many_mapped_tasks_flow():
     '''MRE for a [flow that has 1000+ mapped tasks](https://github.com/PrefectHQ/prefect/issues/7393)
     ```python

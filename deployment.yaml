@@ -1,13 +1,32 @@
 deployments:
-- name: null
-  version: null
-  tags: []
-  description: null
-  schedule: {}
-  flow_name: null
-  entrypoint: null
-  parameters: {}
-  work_pool:
-    name: null
-    work_queue_name: null
-    job_variables: {}
+  - name: artifacts
+    entrypoint: /Users/jennifer/Desktop/Prefect/test_flows/artifact_flow.py:artifacts_flow
+    work_pool:
+      name: kubernetes-gke-worker-dev
+      job_variables: {
+        image: prefecthq/prefect:2-python3.10
+      }
+        
+  - name: sync_async
+    entrypoint: /Users/jennifer/Desktop/Prefect/test_flows/async_sync_flow.py:sync_async_flow
+    work_pool:
+      name: kubernetes-gke-worker-dev
+      job_variables: {
+        image: prefecthq/prefect:2-python3.10
+      }
+  
+  - name: mapped_tasks
+    entrypoint: /Users/jennifer/Desktop/Prefect/test_flows/mapped_tasks_flow.py:many_mapped_tasks_flow
+    work_pool:
+      name: kubernetes-gke-worker-dev
+      job_variables: {
+        image: prefecthq/prefect:2-python3.10
+      }
+
+  - name: mapped_tasks_hanging
+    entrypoint: /Users/jennifer/Desktop/Prefect/test_flows/mapped_tasks_hanging_flow.py:hanging_mapped_tasks_flow
+    work_pool:
+      name: kubernetes-gke-worker-dev
+      job_variables: {
+        image: prefecthq/prefect:2-python3.10
+      }

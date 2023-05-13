@@ -2,5 +2,6 @@
   "Test Flow": "mapped_tasks_flow.py:many_mapped_tasks_flow",
   "artifacts-flow": "artifact_flow.py:artifacts_flow",
   "hanging-mapped-tasks-flow": "mapped_tasks_hanging_flow.py:hanging_mapped_tasks_flow",
+  "many-mapped-tasks-flow": "mapped_tasks_flow.py:many_mapped_tasks_flow",
   "sync-async-flow": "async_sync_flow.py:sync_async_flow"
 }
