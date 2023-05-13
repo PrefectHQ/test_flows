@@ -1,6 +1,6 @@
 deployments:
   - name: artifacts
-    entrypoint: /Users/jennifer/Desktop/Prefect/test_flows/artifact_flow.py:artifacts_flow
+    entrypoint: artifact_flow.py:artifacts_flow
     work_pool:
       name: kubernetes-gke-worker-dev
       job_variables: {
@@ -8,7 +8,7 @@ deployments:
       }
         
   - name: sync_async
-    entrypoint: /Users/jennifer/Desktop/Prefect/test_flows/async_sync_flow.py:sync_async_flow
+    entrypoint: async_sync_flow.py:sync_async_flow
     work_pool:
       name: kubernetes-gke-worker-dev
       job_variables: {
@@ -16,7 +16,7 @@ deployments:
       }
   
   - name: mapped_tasks
-    entrypoint: /Users/jennifer/Desktop/Prefect/test_flows/mapped_tasks_flow.py:many_mapped_tasks_flow
+    entrypoint: mapped_tasks_flow.py:many_mapped_tasks_flow
     work_pool:
       name: kubernetes-gke-worker-dev
       job_variables: {
@@ -24,7 +24,7 @@ deployments:
       }
 
   - name: mapped_tasks_hanging
-    entrypoint: /Users/jennifer/Desktop/Prefect/test_flows/mapped_tasks_hanging_flow.py:hanging_mapped_tasks_flow
+    entrypoint: mapped_tasks_hanging_flow.py:hanging_mapped_tasks_flow
     work_pool:
       name: kubernetes-gke-worker-dev
       job_variables: {
