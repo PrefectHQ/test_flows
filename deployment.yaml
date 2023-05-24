@@ -46,3 +46,15 @@ deployments:
       job_variables: {
         image: prefecthq/prefect-dev:main-python3.10
       }
+  
+  - name: parameters
+    entrypoint: test_param_display.py:mainPydantic
+    tags: [test-flows]
+    schedule:
+      cron: 0 9 * * *
+      timezone: America/Chicago
+    work_pool:
+      name: kubernetes-gke-worker-dev
+      job_variables: {
+        image: prefecthq/prefect-dev:main-python3.10
+      }
