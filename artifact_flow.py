@@ -19,17 +19,15 @@ def my_second_link_task():
         )
 @task
 def my_table_task():
+    highest_churn_possibility = [
+       {'customer_id':'12345', 'name': 'John Smith', 'churn_probability': 0.85 }, 
+       {'customer_id':'56789', 'name': 'Jane Jones', 'churn_probability': 0.65 } 
+    ]
+
     create_table_artifact(
-        key="sales-data-table",
-        table=[
-            ["Region", "Revenue"],
-            ["North America", 500000],
-            ["Europe", 250000],
-            ["Asia", 150000],
-            ["South America", 75000],
-            ["Africa", 25000],
-        ],
-        description="## Sales by Region",
+        key="personalized-reachout",
+        table=highest_churn_possibility,
+        description= "# Marvin, please reach out to these customers today!"
     )
     
 @task
@@ -77,4 +75,4 @@ def artifacts_flow():
     
 
 # if __name__ == "__main__":
-#     my_flow()
+#     artifacts_flow()
