@@ -3,14 +3,35 @@ deployments:
     entrypoint: artifact_flow.py:artifacts_flow
     tags: [test-flows]
     schedule:
-      cron: 0 9 * * *
-      timezone: America/Chicago
+      rrule: FREQ=WEEKLY;INTERVAL=1;BYDAY=FR
     work_pool:
       name: kubernetes-gke-worker-dev
       job_variables: {
         image: prefecthq/prefect-dev:main-python3.10
       }
-        
+  
+  - name: artifacts-2
+    entrypoint: artifact_flow.py:artifacts_flow
+    tags: [test-flows]
+    schedule:
+      rrule: FREQ=DAILY;BYHOUR=10;BYMINUTE=21
+    work_pool:
+      name: kubernetes-gke-worker-dev
+      job_variables: {
+        image: prefecthq/prefect-dev:main-python3.10
+      }
+           
+  - name: artifacts-3
+    entrypoint: artifact_flow.py:artifacts_flow
+    tags: [test-flows]
+    schedule:
+      rrule: FREQ=HOURLY;INTERVAL=1;WKST=MO;BYDAY=MO,TU,WE,TH,FR;BYMINUTE=30
+    work_pool:
+      name: kubernetes-gke-worker-dev
+      job_variables: {
+        image: prefecthq/prefect-dev:main-python3.10
+      }
+           
   - name: sync_async
     entrypoint: async_sync_flow.py:sync_async_flow
     tags: [test-flows]
