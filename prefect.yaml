@@ -2,7 +2,7 @@
 
 # Generic metadata about this project
 name: test_flows
-prefect-version: 2.10.8
+prefect-version: 2.10.15
 
 # build section allows you to manage and build docker images
 build: null
@@ -28,87 +28,12 @@ deployments:
       job_variables: {
         image: prefecthq/prefect-dev:main-python3.10
       }
-  
-  - name: artifacts-2
-    entrypoint: artifact_flow.py:artifacts_flow
-    tags: [test-flows]
-    schedule:
-      rrule: FREQ=DAILY;BYHOUR=10;BYMINUTE=21
-    work_pool:
-      name: kubernetes-gke-worker-dev
-      job_variables: {
-        image: prefecthq/prefect-dev:main-python3.10
-      }
-           
-  - name: artifacts-3
-    entrypoint: artifact_flow.py:artifacts_flow
-    tags: [test-flows]
-    schedule:
-      rrule: FREQ=HOURLY;INTERVAL=1;WKST=MO;BYDAY=MO,TU,WE,TH,FR;BYMINUTE=30
-    work_pool:
-      name: kubernetes-gke-worker-dev
-      job_variables: {
-        image: prefecthq/prefect-dev:main-python3.10
-      }
-           
-  - name: sync_async
-    entrypoint: async_sync_flow.py:sync_async_flow
-    tags: [test-flows]
-    schedule:
-      cron: 0 9 * * *
-      timezone: America/Chicago
-    work_pool:
-      name: kubernetes-gke-worker-dev
-      job_variables: {
-        image: prefecthq/prefect-dev:main-python3.10
-      }
-  
-  - name: mapped_tasks
-    entrypoint: mapped_tasks_flow.py:many_mapped_tasks_flow
-    tags: [test-flows]
-    schedule:
-      cron: 0 9 * * *
-      timezone: America/Chicago
-    work_pool:
-      name: kubernetes-gke-worker-dev
-      job_variables: {
-        image: prefecthq/prefect-dev:main-python3.10
-      }
+    pull:
+      - prefect.projects.steps.git_clone_project:
+      repository: https://github.com/PrefectHQ/test_flows.git
+      branch: stg
+      access_token: null
 
-  - name: mapped_tasks_hanging
-    entrypoint: mapped_tasks_hanging_flow.py:hanging_mapped_tasks_flow
-    tags: [test-flows]
-    schedule:
-      cron: 0 9 * * *
-      timezone: America/Chicago
-    work_pool:
-      name: kubernetes-gke-worker-dev
-      job_variables: {
-        image: prefecthq/prefect-dev:main-python3.10
-      }
-  
-  - name: parameters
-    entrypoint: test_param_display.py:mainPydantic
-    tags: [test-flows]
-    schedule:
-      cron: 0 9 * * *
-      timezone: America/Chicago
-    work_pool:
-      name: kubernetes-gke-worker-dev
-      job_variables: {
-        image: prefecthq/prefect-dev:main-python3.10
-      }
-deployments:
-  - name: artifacts
-    entrypoint: artifact_flow.py:artifacts_flow
-    tags: [test-flows]
-    schedule:
-      rrule: FREQ=WEEKLY;INTERVAL=1;BYDAY=FR
-    work_pool:
-      name: kubernetes-gke-worker-dev
-      job_variables: {
-        image: prefecthq/prefect-dev:main-python3.10
-      }
   
   - name: artifacts-2
     entrypoint: artifact_flow.py:artifacts_flow

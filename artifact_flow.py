@@ -15,7 +15,7 @@ def my_second_link_task():
         create_link_artifact(
             key="variable-data-link",
             link="https://nyc3.digitaloceanspaces.com/my-bucket-name/low_pred_data_.csv",
-            description="# Low prediction accuracy",
+            description="# Low prediction accuracy data",
         )
 @task
 def my_table_task():
