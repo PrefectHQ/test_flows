@@ -11,11 +11,8 @@ build: null
 push: null
 
 # pull section allows you to provide instructions for cloning this project in remote locations
-pull:
-- prefect.projects.steps.git_clone_project:
-    repository: https://github.com/PrefectHQ/test_flows.git
-    branch: main
-    access_token: null
+# pull:
+
 
 deployments:
   - name: artifacts
@@ -23,16 +20,7 @@ deployments:
     tags: [test-flows]
     schedule:
       rrule: FREQ=WEEKLY;INTERVAL=1;BYDAY=FR
-    work_pool:
-      name: kubernetes-gke-worker-dev
-      job_variables: {
-        image: prefecthq/prefect-dev:main-python3.10
-      }
-    pull:
-      - prefect.projects.steps.git_clone_project:
-      repository: https://github.com/PrefectHQ/test_flows.git
-      branch: stg
-      access_token: null
+
 
   
   - name: artifacts-2
