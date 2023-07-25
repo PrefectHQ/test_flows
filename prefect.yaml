@@ -13,10 +13,10 @@ build:
 push:
 
 # pull section allows you to provide instructions for cloning this project in remote locations
-pull:
-- prefect.deployments.steps.git_clone:
-    repository: https://github.com/PrefectHQ/test_flows.git
-    branch: main
+# pull:
+# - prefect.deployments.steps.git_clone:
+#     repository: https://github.com/PrefectHQ/test_flows.git
+#     branch: main
 
 # the deployments section allows you to provide configuration for deploying flows
 deployments:
@@ -107,6 +107,28 @@ deployments:
   parameters: {}
   work_pool:
     name: azure-worker-b
+    work_queue_name:
+    job_variables: {}
+  schedule:
+- name: base
+  version:
+  tags: []
+  description:
+  entrypoint: basic_flow.py:basic_flow
+  parameters: {}
+  work_pool:
+    name: process
+    work_queue_name:
+    job_variables: {}
+  schedule:
+- name: cancel
+  version:
+  tags: []
+  description:
+  entrypoint: cancel.py:sample_flow
+  parameters: {}
+  work_pool:
+    name: process
     work_queue_name:
     job_variables: {}
   schedule:
