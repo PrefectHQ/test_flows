@@ -132,3 +132,18 @@ deployments:
     work_queue_name:
     job_variables: {}
   schedule:
+- name: retry
+  version:
+  tags: []
+  description:
+  entrypoint: retry.py:parentFlow
+  parameters: {}
+  work_pool:
+    name: azure-push
+    work_queue_name:
+    job_variables: {}
+  schedule:
+  pull:
+  - prefect.deployments.steps.git_clone:
+      repository: https://github.com/PrefectHQ/test_flows.git
+      branch: main

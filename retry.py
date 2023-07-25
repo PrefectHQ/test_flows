@@ -17,5 +17,7 @@ def many_mapped_tasks_flow():
 
 @flow
 def parentFlow():
+    test_task(3)
     many_mapped_tasks_flow()
+    test_task(1)
     
