@@ -144,6 +144,34 @@ deployments:
     job_variables: {}
   schedule:
   pull:
-  - prefect.deployments.steps.git_clone:
-      repository: https://github.com/PrefectHQ/test_flows.git
-      branch: main
+- name: must-complete
+  version:
+  tags: []
+  description:
+  entrypoint: retry.py:parentFlow
+  parameters: {}
+  work_pool:
+    name: process
+    work_queue_name:
+    job_variables: {}
+  schedule:
+  pull:
+  - prefect.deployments.steps.set_working_directory:
+      directory: /Users/jennifer/Desktop/Prefect/test_flows
+  # - prefect.deployments.steps.git_clone:
+  #     repository: https://github.com/PrefectHQ/test_flows.git
+  #     branch: main
+- name: myInportantDeployment
+  version:
+  tags: []
+  description:
+  entrypoint: retry.py:myImportantFlow
+  parameters: {}
+  work_pool:
+    name: process
+    work_queue_name:
+    job_variables: {}
+  schedule:
+  pull:
+  - prefect.deployments.steps.set_working_directory:
+      directory: /Users/jennifer/Desktop/Prefect/test_flows

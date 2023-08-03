@@ -6,7 +6,9 @@
   "hanging-mapped-tasks-flow": "mapped_tasks_hanging_flow.py:hanging_mapped_tasks_flow",
   "hi-named-flow": "runtime.py:hi_named_flow",
   "inspiring-joke": "pause.py:inspiring_joke",
+  "main-flow": "subFlowRetry.py:main_flow",
   "many-mapped-tasks-flow": "mapped_tasks_flow.py:many_mapped_tasks_flow",
+  "myImportantFlow": "retry.py:myImportantFlow",
   "parentFlow": "retry.py:parentFlow",
   "sample-flow": "cancel.py:sample_flow",
   "sync-async-flow": "async_sync_flow.py:sync_async_flow"
