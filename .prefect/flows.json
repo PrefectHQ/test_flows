@@ -1,6 +1,7 @@
 {
   "PydantiFields": "test_param_display.py:mainPydantic",
   "Pydantic Fields Default": "test_param_display.py:mainPydantic",
+  "Tuple Param Flow": "tupleParam.py:tuple_flow",
   "artifacts-flow": "artifact_flow.py:artifacts_flow",
   "basic-flow": "basic_flow.py:basic_flow",
   "hanging-mapped-tasks-flow": "mapped_tasks_hanging_flow.py:hanging_mapped_tasks_flow",

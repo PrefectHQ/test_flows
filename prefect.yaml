@@ -217,3 +217,18 @@ deployments:
   - prefect.deployments.steps.git_clone:
       repository: https://github.com/PrefectHQ/test_flows.git
       branch: main
+- name: tupleTest
+  version:
+  tags: []
+  description:
+  entrypoint: tupleParam.py:tuple_flow
+  parameters: {}
+  work_pool:
+    name: ui-sandbox-worker
+    work_queue_name:
+    job_variables: {}
+  schedule:
+  pull:
+  - prefect.deployments.steps.git_clone:
+      repository: https://github.com/PrefectHQ/test_flows.git
+      branch: main
