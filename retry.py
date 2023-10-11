@@ -6,14 +6,14 @@ import random
 
 
 
-@task(name="Test Task")
+@task(name="Test Task5")
 def test_task(my_range):
     print(my_range)
     time.sleep(5)
     print(datetime.today())
     
     
-@task(name="Test Task")
+@task(name="Test Task6")
 def fail_task(my_range):
     print(my_range)
     time.sleep(5)
