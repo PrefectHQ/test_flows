@@ -35,4 +35,4 @@ if __name__ == "__main__":
 	print(name)
 
 if __name__ == "__main__":
-	no_work_pool.serve(__file__, parameters=dict(name="I'm a parameter 2!"), tags=["test", "served"])
+	no_work_pool.serve('nowp', parameters=dict(name="I'm a parameter 2!"), tags=["test", "served"])

@@ -1,0 +1,117 @@
+# Generic metadata about this project
+name: test
+prefect-version: "{{ $PREFECT_VERSION }}"
+# build section allows you to manage and build docker images
+build:
+  # - prefect.deployments.steps.run_shell_script:
+  #     # gets the version for the deployment.
+  #     # either the git hash, or a checksum for local deployments
+  #     id: get-version
+  #     script: bash scripts/get_version.sh
+  #     stream_output: true
+  #     expand_env_vars: true
+  # - prefect.deployments.steps.run_shell_script:
+  #     id: get-tag
+  #     script: echo $PREFECT_WORKSPACE-$VERSION
+  #     stream_output: true
+  #     expand_env_vars: true
+  #     env:
+  #       VERSION: "{{ get-version.stdout }}"
+  # - prefect_docker.deployments.steps.build_docker_image:
+  #     id: build_image
+  #     requires: prefect-docker>=0.3.1
+  #     image_name: "{{ $REPO_NAME }}"
+  #     tag: "{{ get-tag.stdout }}"
+  #     path: ../..
+  #     dockerfile: flows/{{ $FLOW_NAME }}/Dockerfile
+# push section allows you to manage if and how this project is uploaded to remote locations
+push:
+  - prefect_docker.deployments.steps.push_docker_image:
+      # build the docker image, and pushes to the docker repo
+      # for local builds, there is a local repo. for cloud builds, it pushes to ECR
+#       requires: prefect-docker>=0.3.1
+#       image_name: "{{ build_image.image_name }}"
+#       tag: "{{ build_image.tag }}"
+#       credentials:
+#         username: AWS
+#         password: "{{ $DOCKER_REGISTRY_PASSWORD }}" # we get this value at runtime from an aws command
+#         registry_url: "{{ $REGISTRY_URL }}"
+# # pull section allows you to provide instructions for cloning this project in remote locations
+# pull:
+#   - prefect.deployments.steps.set_working_directory:
+#       directory: /opt/prefect/
+definitions:
+  version: &version "{{ build_image.tag }}"
+  image: &image "{{ build_image.image }}"
+  entry_point: &entry_point flows/import_addigy/import_addigy.py:main
+  secrets_provider: &secrets-provider "{{ $SECRETS_PROVIDER }}"
+  env: &env
+    FLOW_NAME: "{{ $FLOW_NAME }}"
+    PREFECT_WORKSPACE: "{{ $PREFECT_WORKSPACE }}"
+  container_env: &container_env
+#     - name: SNOWFLAKE_PASSWORD
+#       valueFrom:
+#         secretKeyRef:
+#           key: snowflake-password
+#           name: *secrets-provider
+#     - name: SLACK_WEBHOOK_URL
+#       valueFrom:
+#         secretKeyRef:
+#           key: slack-webhook-url
+#           name: *secrets-provider
+#     - name: ADDIGY_API_CREDENTIALS
+#       valueFrom:
+#         secretKeyRef:
+#           key: addigy-api-credentials
+#           name: *secrets-provider
+
+# If adding deployments, please append name to the end of the [deployment.name](http://deployment.name/). Eg, production-1 and production-2
+deployments:
+  - name: local
+    version: *version
+    tags: []
+    description: null
+    schedule: {}
+    entrypoint: *entry_point
+    parameters: {}
+    work_pool:
+      name: "work_pool_default" # this can be changed based on needs, esp concurrency
+      work_queue_name: null # default queue name
+      job_variables:
+        image: *image
+        env: *env
+        networks: [prefect-network]
+  # <<>DEV_ID>> will be replaced during CI process
+  - name: dev<<DEV_ID>>
+    version: *version
+    tags: []
+    description: null
+    schedule: {}
+    entrypoint: *entry_point
+    parameters: {}
+    work_pool:
+      name: work_pool_default<<DEV_ID>> # this can be changed based on needs, esp concurrency
+      work_queue_name: null # default queue name
+      job_variables:
+        image: *image
+        env: *env
+        container_env: *container_env
+  - name: production
+    version: *version
+    tags: []
+    description: null
+    schedule:
+      cron: 0 * * * * # hourly
+      timezone: UTC
+    # cron: 0 0 * * *
+    # timezone: America/Chicago
+    # timezone: UTC
+    entrypoint: *entry_point
+    parameters: {}
+    work_pool:
+      name: "work_pool_default" # this can be changed based on needs, esp concurrency
+      work_queue_name: null # default queue name
+      job_variables:
+        image: *image
+        env: *env
+        container_env: *container_env

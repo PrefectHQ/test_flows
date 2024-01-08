@@ -1,10 +1,13 @@
 import datetime
-from typing import Dict, List, Optional, Set, Tuple
+from typing import Dict, List, Optional, Set
+from enum import Enum
 
-from prefect import flow, get_run_logger
-from pydantic import UUID4, BaseModel, Field, Json
+from prefect import flow
+from pydantic import BaseModel, Field, Json
 
-
+class FruitEnum(str, Enum):
+    pear = 'pear'
+    banana = 'banana'
 class PydanticFieldsDefault(BaseModel): 
 
     bool_field_default: Optional[bool] = Field(
@@ -17,18 +20,19 @@ class PydanticFieldsDefault(BaseModel):
         title="Title float_field_default", description="Description float_field_default", default=1.23
     )
     str_field_default: Optional[str] = Field(
-        title="Title str_field_default", description="Description str_field_default", default="default"
+        title="Title str_field_default", description="Description str_field_default",
     )
     list_field_default: Optional[List[str]] = Field(
         title="Title list_field_default",
         description="Description list_field_default",
         default=["default", "default", "default"],
     )
-    tuple_field_default: Optional[Tuple[str, str]] = Field(
-        title="Title tuple_field_default",
-        description="Description tuple_field_default",
-        default=("default", "default"),
-    )
+    #tuples not currently supported in non json input
+    # tuple_field_default: Optional[Tuple[str, str]] = Field(
+    #     title="Title tuple_field_default",
+    #     description="Description tuple_field_default",
+    #     default=("default", "default"),
+    # )
     dict_field_default: Optional[Dict[str, str]] = Field(
         title="Title dict_field_default", description="Description dict_field_default", default={"name": "default"}
     )
@@ -50,20 +54,27 @@ class PydanticFieldsDefault(BaseModel):
         description="Description datetime_field_default",
         default=datetime.datetime(2022, 1, 1, 12, 12),
     )
-    uuid_field_default: Optional[UUID4] = Field(
-        title="Title uuid_field_default",
-        description="Description uuid_field_default",
-        default=UUID4("aa763817-0ba2-4771-bfc7-1550d1646874"),
-    )
+    #uuid objects are immutable
+    # uuid_field_default: Optional[UUID4] = Field(
+    #     title="Title uuid_field_default",
+    #     description="Description uuid_field_default",
+    #     default=UUID4("aa763817-0ba2-4771-bfc7-1550d1646874"),
+    # )
     json_field_default: Optional[Json] = Field(
         title="Title json_field_default",
         description="Description json_field_default",
         default='{"name":"John", "age":30, "car":null}',
     )
+    enum_field_default: Optional[FruitEnum] = Field(
+        title="Title enum_field_default",
+        description="Description enum_field_default",
+        default=FruitEnum.pear,
+    )
 
 
-@flow(name="PydantiFields")
-def mainPydantic(
+
+@flow(log_prints=True)
+def parameterDisplays(
     pydantic_fields_default_defaults: PydanticFieldsDefault = PydanticFieldsDefault(),
 ) -> None:
     '''Flow to test display of Pydantic fields with default values
@@ -97,11 +108,12 @@ class PydanticFieldsDefault(BaseModel):
         description="Description list_field_default",
         default=["default", "default", "default"],
     )
-    tuple_field_default: Optional[Tuple[str, str]] = Field(
-        title="Title tuple_field_default",
-        description="Description tuple_field_default",
-        default=("default", "default"),
-    )
+    #tuple inputs currently not supported - can be done via json
+    # tuple_field_default: Optional[Tuple[str, str]] = Field(
+    #     title="Title tuple_field_default",
+    #     description="Description tuple_field_default",
+    #     default=("default", "default"),
+    # )
     dict_field_default: Optional[Dict[str, str]] = Field(
         title="Title dict_field_default", description="Description dict_field_default", default={"name": "default"}
     )
@@ -123,16 +135,21 @@ class PydanticFieldsDefault(BaseModel):
         description="Description datetime_field_default",
         default=datetime.datetime(2022, 1, 1, 12, 12),
     )
-    uuid_field_default: Optional[UUID4] = Field(
-        title="Title uuid_field_default",
-        description="Description uuid_field_default",
-        default=UUID4("aa763817-0ba2-4771-bfc7-1550d1646874"),
-    )
+    #UUID objects are immutable
+    # uuid_field_default: Optional[UUID4] = Field(
+    #     title="Title uuid_field_default",
+    #     description="Description uuid_field_default",
+    #     default=UUID4("aa763817-0ba2-4771-bfc7-1550d1646874"),
+    # )
     json_field_default: Optional[Json] = Field(
         title="Title json_field_default",
         description="Description json_field_default",
         default='{"name":"John", "age":30, "car":null}',
     )
+    complex_object: Optional[List[Dict[str, str]]] = Field(
+                title="some_complex_object",
+                default=complex_object,
+            )
 
 
 @flow(name="Pydantic Fields Default")
@@ -144,5 +161,8 @@ def mainPydantic(
 
 ```
     '''
-    logger = get_run_logger()
-    logger.info(f"{pydantic_fields_default_defaults=}")
+    
+    print(f"{pydantic_fields_default_defaults=}")
+
+if __name__ == "__main__":
+    parameterDisplays.serve(name="aparambar")

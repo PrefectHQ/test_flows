@@ -12,6 +12,16 @@ build:
 # push section allows you to manage if and how this project is uploaded to remote locations
 push:
 
+definitions:
+  version: &version '{{ build_image.tag }}'
+  image: &image '{{ build_image.image }}'
+  entry_point: &entry_point flows/import_addigy/import_addigy.py:main
+  secrets_provider: &secrets-provider '{{ $SECRETS_PROVIDER }}'
+  env: &env
+    FLOW_NAME: '{{ $FLOW_NAME }}'
+    PREFECT_WORKSPACE: '{{ $PREFECT_WORKSPACE }}'
+  container_env:
+
 # pull section allows you to provide instructions for cloning this project in remote locations
 # pull:
 # - prefect.deployments.steps.git_clone:
@@ -169,8 +179,11 @@ deployments:
   parameters: {}
   work_pool:
     name: process
-    work_queue_name:
-    job_variables: {}
+    work_queue_name:      # default queue name
+    job_variables:
+      image: *image
+      env: *env
+      container_env:
   schedule:
   pull:
   - prefect.deployments.steps.set_working_directory:
@@ -255,6 +268,95 @@ deployments:
   parameters: {}
   work_pool:
     name: ui-sandbox-worker
+    work_queue_name:
+    job_variables: {}
+  schedule:
+  pull:
+  - prefect.deployments.steps.git_clone:
+      repository: https://github.com/PrefectHQ/test_flows.git
+      branch: main
+- name: testParamDecember
+  version:
+  tags: []
+  description: "Flow to test display of Pydantic fields with default values\n    \n
+    #Flow code\n\n```python\nimport datetime\nfrom typing import Dict, List, Optional,
+    Set, Tuple\n\nfrom prefect import flow, get_run_logger\nfrom pydantic import UUID4,
+    BaseModel, Field, Json\n\n\nclass PydanticFieldsDefault(BaseModel): \n\n    bool_field_default:
+    Optional[bool] = Field(\n        title=\"Title bool_field_default\", description=\"\
+    Description bool_field_default\", default=True\n    )\n    int_field_default:
+    Optional[int] = Field(\n        title=\"Title int_field_default\", description=\"\
+    Description int_field_default\", default=42\n    )\n    float_field_default: Optional[float]
+    = Field(\n        title=\"Title float_field_default\", description=\"Description
+    float_field_default\", default=1.23\n    )\n    str_field_default: Optional[str]
+    = Field(\n        title=\"Title str_field_default\", description=\"Description
+    str_field_default\", default=\"default\"\n    )\n    list_field_default: Optional[List[str]]
+    = Field(\n        title=\"Title list_field_default\",\n        description=\"
+    Description list_field_default\",\n        default=[\"default\", \"default\",
+    \"default\"],\n    )\n    #tuple inputs currently not supported - can be done
+    via json\n    # tuple_field_default: Optional[Tuple[str, str]] = Field(\n    #\
+    \     title=\"Title tuple_field_default\",\n    #     description=\"Description
+    tuple_field_default\",\n    #     default=(\"default\", \"default\"),\n    # )\n\
+    \    dict_field_default: Optional[Dict[str, str]] = Field(\n        title=\"Title
+    dict_field_default\", description=\"Description dict_field_default\", default={\"\
+    name\": \"default\"}\n    )\n    set_field_default: Optional[Set[str]] = Field(\n\
+    \        title=\"Title set_field_default\",\n        description=\"Description
+    set_field_default\",\n        default=(\"default_0\", \"default_1\"),\n    )\n\
+    \    date_field_default: Optional[datetime.date] = Field(\n        title=\"Title
+    date_field_default\",\n        description=\"Description date_field_default\"\
+    ,\n        default=datetime.date(2022, 1, 1),\n    )\n    time_field_default:
+    Optional[datetime.time] = Field(\n        title=\"Title time_field_default\",
+    description=\"Description time_field_default\", default=datetime.time(12, 12)\n\
+    \    )\n    datetime_field_default: Optional[datetime.datetime] = Field(\n   \
+    \     title=\"Title datetime_field_default\",\n        description=\"Description
+    datetime_field_default\",\n        default=datetime.datetime(2022, 1, 1, 12, 12),\n\
+    \    )\n    #UUID objects are immutable\n    # uuid_field_default: Optional[UUID4]
+    = Field(\n    #     title=\"Title uuid_field_default\",\n    #     description=\"\
+    Description uuid_field_default\",\n    #     default=UUID4(\"aa763817-0ba2-4771-bfc7-1550d1646874\"\
+    ),\n    # )\n    json_field_default: Optional[Json] = Field(\n        title=\"\
+    Title json_field_default\",\n        description=\"Description json_field_default\"\
+    ,\n        default='{\"name\":\"John\", \"age\":30, \"car\":null}',\n    )\n\n\
+    \n@flow(name=\"Pydantic Fields Default\")\ndef mainPydantic(\n    pydantic_fields_default_defaults:
+    PydanticFieldsDefault = PydanticFieldsDefault(),\n) -> None:\n    logger = get_run_logger()\n\
+    \    logger.info(f\"{pydantic_fields_default_defaults=}\")\n\n```\n    "
+  entrypoint: test_param_display.py:parameterDisplays
+  parameters: {}
+  work_pool:
+    name: azure-wp-prov
+    work_queue_name:
+    job_variables: {}
+  schedule:
+  pull:
+  - prefect.deployments.steps.set_working_directory:
+      directory: /Users/jennifer/Desktop/Prefect/test_flows
+- name: trig
+  version:
+  tags: []
+  description:
+  entrypoint: script.py:tay
+  parameters: {}
+  work_pool:
+    name: process
+    work_queue_name:
+    job_variables: {}
+  schedule:
+  triggers:
+  - enabled: true
+    match:
+      prefect.resource.id: my.external.resource
+    expect:
+    - external.resource.pinged
+    name: trig__automation_1
+  pull:
+  - prefect.deployments.steps.set_working_directory:
+      directory: /Users/jennifer/Desktop/Prefect/test_flows
+- name: cached
+  version:
+  tags: []
+  description:
+  entrypoint: cacheFlow.py:hello_flow
+  parameters: {}
+  work_pool:
+    name: managed
     work_queue_name:
     job_variables: {}
   schedule:
