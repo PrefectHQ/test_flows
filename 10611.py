@@ -10,7 +10,3 @@ def demo_flow_union(input_dict: Union[Dict[str, Any], str]):
     print("Demo Flow")
     demo_task()
 
-@flow
-def demo_flow_optional(input_dict: Optional[Dict[str, Any]]):
-    print("Demo Flow")
-    demo_task()
